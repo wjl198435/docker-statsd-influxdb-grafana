@@ -1,0 +1,357 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 5,
+  "links": [],
+  "panels": [
+    {
+      "circleMaxSize": "15",
+      "circleMinSize": "5",
+      "colors": [
+        "#3274D9",
+        "#FF780A",
+        "#C4162A"
+      ],
+      "datasource": "MySQL",
+      "decimals": 0,
+      "description": "",
+      "esMetric": "Count",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "hideEmpty": false,
+      "hideZero": false,
+      "id": 2,
+      "initialZoom": "4",
+      "links": [],
+      "locationData": "table",
+      "mapCenter": "custom",
+      "mapCenterLatitude": "39",
+      "mapCenterLongitude": "116",
+      "maxDataPoints": 1,
+      "mouseWheelZoom": true,
+      "showLegend": true,
+      "stickyLabels": false,
+      "tableQueryOptions": {
+        "geohashField": "geohash",
+        "labelField": "name",
+        "latitudeField": "latitude",
+        "longitudeField": "longitude",
+        "metricField": "value",
+        "queryType": "coordinates"
+      },
+      "targets": [
+        {
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  sum(`scale`) as value,\n  `lat` as latitude,\n  `lon` as longitude,\n  `province` as name\nFROM companies\ngroup by  `province`\norder by value ASC \n\n\n",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "worldmap_latlng",
+          "timeColumn": "id",
+          "timeColumnType": "int",
+          "where": [
+            {
+              "name": "$__unixEpochFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "thresholds": "500000,1000000",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "全国存栏分布",
+      "type": "grafana-worldmap-panel",
+      "unitPlural": "头",
+      "unitSingle": "",
+      "unitSingular": "头",
+      "valueName": "total"
+    },
+    {
+      "columns": [],
+      "datasource": "MySQL",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 0
+      },
+      "id": 4,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": null,
+        "desc": false
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "dateFormat": "YYYY-MM-DD",
+          "pattern": "Time",
+          "type": "date"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "currencyJPY"
+        }
+      ],
+      "targets": [
+        {
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  `省份`,\n `外三元`,\n `内三元`,\n `土杂猪`,\nDATE_FORMAT(`日期`,'%Y-%m-%d') as 日期\nFROM PigPrices \nwhere TO_DAYS(`日期`) = TO_DAYS(NOW())\nORDER BY `外三元` DESC\n",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "各省今日生猪价格",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "MySQL",
+      "fill": 1,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 6,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "7d",
+                "none"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  UNIX_TIMESTAMP(`日期`) AS time,\n  \n  avg(外三元) AS \"外三元\",\n  avg(内三元) AS \"内三元\",\n  avg(土杂猪) AS \"土杂猪\"\n  \nFROM PigPrices\ngroup by `日期`\n",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "外三元"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "外三元"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "内三元"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "内三元"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "PigPrices",
+          "timeColumn": "id",
+          "timeColumnType": "int",
+          "where": []
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "全国生猪均价走势(价格/斤)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "currencyJPY",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "massg",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 18,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-2d",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "timezone": "",
+  "title": "map",
+  "uid": "0dSdZB1Zz",
+  "version": 14
+}

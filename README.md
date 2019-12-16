@@ -96,5 +96,62 @@ Port: 8086
 
 ### InfluxDB Shell (CLI)
 
+sudo docker exec -it 4c9a787c9f69  /bin/bash
+
 1. Attach to docker container, run shell `/bin/bash`
 2. Launch `influx` to open InfluxDB Shell (CLI)
+
+1.登陆容器
+2. # influx 启动 influx shell
+3.use telegraf
+4. select * from mqtt_consumer
+
+## influex
+  DROP DATABASE
+  #创建数据库
+create database "db_name"
+ 
+#显示所有的数据库
+show databases
+ 
+#删除数据库
+drop database "db_name"
+ 
+#使用数据库
+use db_name
+ 
+#显示该数据库中所有的表
+show measurements
+ 
+#创建表，直接在插入数据的时候指定表名
+insert test,host=127.0.0.1,monitor_name=test count=1
+ 
+#删除表
+drop measurement "measurement_name"
+
+
+
+
+/*
+SELECT
+  UNIX_TIMESTAMP(`timestamp`) as time_sec,
+  `value` as value,
+  `lat` as latitude,
+  `lng` as longitude,
+  `name` as name
+FROM worldmap_latlng
+WHERE $__timeFilter(`timestamp`)
+ORDER BY `timestamp` ASC
+
+
+
+SELECT
+  `value` as value,
+  `lat` as latitude,
+  `lng` as longitude,
+  `name` as name
+FROM worldmap_latlng
+
+
+*/
+
